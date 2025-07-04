@@ -90,60 +90,88 @@ $(function() {
 
 
 const certifications = [
-    'assets/img/cert1.png',
-    'assets/img/cert2.png',
-    'assets/img/cert3.png',
-    'assets/img/cert4.png',
-    'assets/img/cert5.png',
-    'assets/img/cert6.png',
-    'assets/img/cert7.png',
-    'assets/img/cert8.png',
-    'assets/img/cert9.png',
-    'assets/img/cert10.png',
-    'assets/img/cert11.png'
+    {
+        img: 'assets/img/SQL.jpg',
+    },
+    {
+        img: 'assets/img/PLSQL.jpg',
+    },
+    {
+        img: 'assets/img/CX.png',
+    },
+    {
+        img: 'assets/img/ERP.png',
+    },
+    {
+        img: 'assets/img/HCM.png',
+    },
+    {
+        img: 'assets/img/OCI.png',
+    },
+    {
+        img: 'assets/img/SCM.png',
+    },
+    {
+        img: 'assets/img/JS.png',
+    },
+    {
+        img: 'assets/img/RAPI.png',
+    },
+    {
+        img: 'assets/img/PS.png',
+    },
 ];
 
 let currentCertificationIndex = 0;
 
 function showCertification(index) {
     currentCertificationIndex = index;
-    document.getElementById('certificationImage').src = certifications[index];
+    const cert = certifications[index];
+    const img = document.getElementById('certificationImage');
+    if (!cert || !img) return;
+    img.classList.remove('cert-img-animate'); // reset animation
+    void img.offsetWidth; // trigger reflow
+    img.src = cert.img;
+    img.alt = cert.title;
+    img.classList.add('cert-img-animate');
+    document.getElementById('certModalTitle').textContent = cert.title;
+    document.getElementById('certModalDesc').textContent = cert.desc;
+    document.getElementById('certProgress').textContent = `${index + 1} of ${certifications.length}`;
     $('#certificationModal').modal('show');
 }
 
-document.getElementById('prevCertification').addEventListener('click', function() {
-    if (currentCertificationIndex > 0) {
-        showCertification(currentCertificationIndex - 1);
-    } else {
-        showCertification(certifications.length - 1);
-    }
-});
-
-document.getElementById('nextCertification').addEventListener('click', function() {
-    if (currentCertificationIndex < certifications.length - 1) {
-        showCertification(currentCertificationIndex + 1);
-    } else {
-        showCertification(0);
-    }
-});
-
-document.querySelectorAll('[data-target="#certificationModal"]').forEach((element, index) => {
-    element.addEventListener('click', function() {
-        showCertification(index);
-    });
-});
-
 document.addEventListener("DOMContentLoaded", function() {
+    // Hero typing and fade-in logic
     const heroTitle = document.getElementById('hero-title');
-    heroTitle.addEventListener('animationend', function() {
-        heroTitle.classList.remove('typing');
-        const heroContent = document.getElementById('hero-content');
-        const delayedElements = heroContent.querySelectorAll('.delayed-fade-in');
-        delayedElements.forEach((element, index) => {
-            element.style.animation = `fadeIn 2s ease-in ${index * 0.5}s forwards`;
+    if (heroTitle) {
+        heroTitle.addEventListener('animationend', function() {
+            heroTitle.classList.remove('typing');
+            const heroContent = document.getElementById('hero-content');
+            if (heroContent) {
+                const delayedElements = heroContent.querySelectorAll('.delayed-fade-in');
+                delayedElements.forEach((element, index) => {
+                    element.style.animation = `fadeIn 2s ease-in ${index * 0.5}s forwards`;
+                });
+            }
+            // Start .mypic animation after typing effect
+            const myPic = document.querySelector('.mypic');
+            if (myPic) {
+                myPic.style.animationPlayState = 'running';
+            }
         });
-        // Start .mypic animation after typing effect
-        const myPic = document.querySelector('.mypic');
-        myPic.style.animationPlayState = 'running';
-    });
+    }
+
+    // Certification modal navigation
+    const prevBtn = document.getElementById('prevCertification');
+    const nextBtn = document.getElementById('nextCertification');
+    if (prevBtn && nextBtn) {
+        prevBtn.onclick = function() {
+            currentCertificationIndex = (currentCertificationIndex - 1 + certifications.length) % certifications.length;
+            showCertification(currentCertificationIndex);
+        };
+        nextBtn.onclick = function() {
+            currentCertificationIndex = (currentCertificationIndex + 1) % certifications.length;
+            showCertification(currentCertificationIndex);
+        };
+    }
 });
