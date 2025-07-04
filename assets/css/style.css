@@ -16,7 +16,6 @@
   font-family: "fontello";
   font-style: normal;
   font-weight: normal;
-  speak: none;
   display: inline-block;
   text-decoration: inherit;
   width: 1em;
@@ -94,7 +93,7 @@ h4 {
     background-color: transparent; 
     box-shadow: none;
     outline: 0 none transparent;
-    -webkit-appearance:none;
+
 }
 
 textarea {
