@@ -11,13 +11,16 @@ $(function() {
     });
 
     //jQuery for page scrolling feature - requires jQuery Easing plugin
-    $(document).on('click', '.page-scroll a', function(event) {
-        var $anchor = $(this);
+$(document).on('click', '.page-scroll a', function(event) {
+    var $anchor = $(this);
+    var $target = $($anchor.attr('href'));
+    if ($target.length && $target.offset()) {
         $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top
+            scrollTop: $target.offset().top
         }, 1000, 'easeInOutExpo');
-        event.preventDefault();
-    });
+    }
+    event.preventDefault();
+});
 
     // Highlight the top nav as scrolling occurs
     $('body').scrollspy({
